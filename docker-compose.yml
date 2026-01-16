@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    env_file: .env
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+    expose:
+      - "8000"
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: queue
+      POSTGRES_USER: queue
+      POSTGRES_PASSWORD: queue
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    expose:
+      - "5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    expose:
+      - "6379"
+
+volumes:
+  pgdata:
